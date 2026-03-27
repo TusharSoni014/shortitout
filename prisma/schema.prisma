@@ -22,6 +22,7 @@ model User {
   sessions      Session[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  links         Link[]
 }
 
 model Account {
@@ -61,4 +62,17 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  longUrl   String
+  shortUrl  String   @unique() @db.VarChar(10)
+  clicks    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  owner     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

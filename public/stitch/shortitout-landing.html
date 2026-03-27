@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShortItOut - URL Shortener</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+            background-color: #0e0e10;
+        }
+        .mono-all * {
+            font-family: "JetBrains Mono", monospace !important;
+        }
+        .glass-nav {
+            background: rgba(14, 14, 16, 0.7);
+            backdrop-filter: blur(16px);
+        }
+        .monolith-gradient {
+            background: radial-gradient(at top left, #18181b 0%, #0e0e10 70%);
+        }
+        .grain-overlay {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDLitToQ8P2ErYblwEX2DwiJ-33hAZqxhaE6bzZE3V8UpNtx_KYkAoCmoJaWAzeDOUnjCzzxPTvofWUEOHsvCPZNM9fDjoY8-UFmUhZPJqE5Bl6V4jiavII4HPRxRiNguOpy_AJIlC0AysaPrEuoP6NQmolpreA4uiUGMgxdbr2k3sE8K8xKkP1CKbZDR41NdoGLFalzbgbtjXDZPo-GKHbL9d37EoHtIUkZvU0vQPDT2lvg0lA8fhMR41TdTB0D3kMJ1sON7sIDsw);
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        .text-gradient {
+            background: linear-gradient(to bottom, #f4f4f5 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+        .border-zinc-custom {
+            border-color: #27272a;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "background": "#0e0e10",
+                "surface": "#0e0e10",
+                "on-surface": "#f4f4f5",
+                "on-surface-variant": "#a1a1aa",
+                "primary": "#fafafa",
+                "on-primary": "#09090b",
+                "outline-variant": "#27272a",
+                "surface-container-low": "#131316",
+                "surface-container": "#18181b",
+              },
+              fontFamily: {
+                "headline": ["JetBrains Mono"],
+                "body": ["JetBrains Mono"],
+                "label": ["JetBrains Mono"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface selection:bg-zinc-700 selection:text-white mono-all">
+<div class="fixed inset-0 grain-overlay z-[100]"></div>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-zinc-custom">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="font-mono font-bold tracking-tighter text-on-surface text-lg">SHORTITOUT</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-mono tracking-tighter uppercase text-xs text-zinc-500 hover:text-on-surface transition-colors duration-300" href="#">API</a>
+<a class="font-mono tracking-tighter uppercase text-xs text-zinc-500 hover:text-on-surface transition-colors duration-300" href="#">Pricing</a>
+<a class="font-mono tracking-tighter uppercase text-xs text-on-surface border-b border-on-surface pb-0.5" href="#">Shorten</a>
+</div>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+                Login
+            </button>
+</div>
+</nav>
+<main class="relative">
+<!-- Hero Section -->
+<section class="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden monolith-gradient">
+<div class="text-center max-w-4xl z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-custom bg-surface-container-low mb-8">
+<span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+<span class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-medium">Free Tier Active / v1.0</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-gradient mb-6 leading-[0.9] max-w-3xl mx-auto">
+                    SHORTEN YOUR LINKS, BROADEN YOUR REACH.
+                </h1>
+<p class="text-sm md:text-base text-zinc-500 mb-12 max-w-xl mx-auto uppercase tracking-widest leading-relaxed">
+                    Enter long URL, make it short in seconds, share, unlimited free.
+                </p>
+<!-- URL Input Field -->
+<div class="w-full max-w-2xl mx-auto p-1.5 bg-surface-container border border-zinc-custom rounded-xl shadow-2xl flex flex-col sm:flex-row gap-2">
+<div class="flex-1 flex items-center px-4 bg-background border border-zinc-custom rounded-lg focus-within:border-zinc-500 transition-colors">
+<span class="material-symbols-outlined text-zinc-500 text-lg mr-3">link</span>
+<input class="w-full bg-transparent border-none focus:ring-0 py-4 text-sm font-mono placeholder:text-zinc-700 text-on-surface" placeholder="https://very-long-url-to-be-shortened.com/xyz..." type="url"/>
+</div>
+<button class="px-8 py-4 bg-primary text-on-primary font-bold uppercase tracking-widest text-xs rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                        Shorten
+                        <span class="material-symbols-outlined text-sm">content_cut</span>
+</button>
+</div>
+</div>
+<!-- Subtle Grid Background -->
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 1px 1px, #27272a 1px, transparent 0); background-size: 40px 40px;"></div>
+</section>
+<!-- Stats Section -->
+<section class="py-24 border-y border-zinc-custom bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center md:text-left">
+<div class="p-8 border border-zinc-custom bg-background rounded-xl">
+<div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Network activity</div>
+<div class="text-5xl font-bold tracking-tighter text-on-surface">1,240,582<span class="text-zinc-700">+</span></div>
+<p class="text-xs text-zinc-500 uppercase mt-4 tracking-widest font-bold">Links Shortened</p>
+</div>
+<div class="p-8 border border-zinc-custom bg-background rounded-xl">
+<div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Global traffic</div>
+<div class="text-5xl font-bold tracking-tighter text-on-surface">8,902,341<span class="text-zinc-700">+</span></div>
+<p class="text-xs text-zinc-500 uppercase mt-4 tracking-widest font-bold">Total Clicks</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA / Footer Info -->
+<section class="py-32 px-6 bg-background">
+<div class="max-w-4xl mx-auto text-center">
+<h2 class="text-3xl font-bold tracking-tighter mb-8 text-on-surface uppercase leading-tight">No tracking. No fluff.</h2>
+<p class="text-zinc-500 font-mono text-sm mb-12 max-w-xl mx-auto uppercase tracking-widest leading-relaxed">
+                    Designed for minimalists who need reliable link management without the overhead of enterprise marketing suites.
+                </p>
+<div class="flex items-center justify-center gap-8 text-zinc-700">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Fast</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Secure</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">public</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Free</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-background border-t border-zinc-custom w-full py-12">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto gap-8">
+<div class="flex flex-col gap-2">
+<div class="text-on-surface font-bold font-mono tracking-tighter text-lg">SHORTITOUT</div>
+<div class="font-mono text-[9px] tracking-widest uppercase text-zinc-600">© 2024 SHORTITOUT INFRASTRUCTURE. OPEN SOURCE.</div>
+</div>
+<div class="flex gap-8">
+<a class="font-mono text-[10px] tracking-widest uppercase text-zinc-500 hover:text-on-surface transition-colors" href="#">API Docs</a>
+<a class="font-mono text-[10px] tracking-widest uppercase text-zinc-500 hover:text-on-surface transition-colors" href="#">Privacy</a>
+<a class="font-mono text-[10px] tracking-widest uppercase text-zinc-500 hover:text-on-surface transition-colors" href="#">Github</a>
+</div>
+<div class="flex items-center gap-4 text-zinc-600">
+<span class="material-symbols-outlined text-sm">lan</span>
+<span class="text-[10px] font-mono tracking-widest uppercase">Nodes: Stable</span>
+</div>
+</div>
+</footer>
+</body></html>

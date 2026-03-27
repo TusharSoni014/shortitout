@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#ff97a3",
+              "on-primary-fixed-variant": "#5a5c5c",
+              "secondary-container": "#3b3b3e",
+              "primary-fixed": "#e2e2e2",
+              "surface-container-highest": "#25252b",
+              "surface-tint": "#c6c6c7",
+              "on-secondary-fixed-variant": "#5c5b5e",
+              "tertiary-container": "#eceaf3",
+              "secondary-fixed": "#e4e1e5",
+              "background": "#0e0e10",
+              "surface-variant": "#25252b",
+              "secondary": "#9f9da1",
+              "on-secondary": "#202023",
+              "on-secondary-container": "#c1bec2",
+              "surface-dim": "#0e0e10",
+              "primary-container": "#454747",
+              "inverse-surface": "#fcf8fb",
+              "primary-dim": "#b8b9b9",
+              "on-surface-variant": "#acaab1",
+              "on-surface": "#e7e4ec",
+              "tertiary-fixed-dim": "#e1dee7",
+              "on-secondary-fixed": "#3f3f42",
+              "on-tertiary": "#5f5e66",
+              "inverse-primary": "#5e5f5f",
+              "inverse-on-surface": "#565457",
+              "error": "#ec7c8a",
+              "on-tertiary-container": "#56565d",
+              "tertiary-fixed": "#efedf6",
+              "on-error": "#490013",
+              "surface-bright": "#2b2c32",
+              "outline-variant": "#47474e",
+              "on-tertiary-fixed": "#46464d",
+              "on-tertiary-fixed-variant": "#626269",
+              "on-primary": "#3f4041",
+              "secondary-fixed-dim": "#d6d3d7",
+              "outline": "#75757c",
+              "on-primary-fixed": "#3e4040",
+              "surface-container-low": "#131316",
+              "on-background": "#e7e4ec",
+              "surface-container-lowest": "#000000",
+              "error-dim": "#b95463",
+              "tertiary": "#fbf8ff",
+              "surface-container-high": "#1f1f24",
+              "surface": "#0e0e10",
+              "on-primary-container": "#d0d0d0",
+              "secondary-dim": "#9f9da1",
+              "primary-fixed-dim": "#d4d4d4",
+              "tertiary-dim": "#e1dee7",
+              "error-container": "#7f2737",
+              "primary": "#c6c6c7",
+              "surface-container": "#19191d"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e0e10;
+            background-image: radial-gradient(at top left, #19191d 0%, #0e0e10 70%);
+            min-height: 100vh
+        }
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD24LSYMz6LeYYMOxSmzBLE6DLsZw0H9l52s-RTlrNw-N5CJzCKnPEK-UyoaAQWyKtU7bsflsCDygIFiC_cdBNg1yLtPnMBDgy_VGKfVeN6xFzoEXGATXo9K8xwjwV674hOyyRqATnfVktcPoiA1PMjAec_B5iBGx2Rkz1V8WW6fwFtxNkQH7-BSyNHjUUyMgEHcM3ysqgA7J8CavRYy46SqvaC578sB6rh5W5dcKcanHNaNamd1X4rPzwTRm1RhmBDojIulLuvUa0);
+            opacity: 0.02;
+            z-index: 50
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased">
+<div class="grain-overlay"></div>
+<div class="flex min-h-screen">
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center p-8 lg:p-16">
+<!-- Back/Nav Header (Optional but good for UX since sidebar is gone) -->
+<div class="fixed top-0 left-0 right-0 p-8 flex justify-between items-center z-10">
+<h1 class="text-lg font-black text-[#e7e4ec] font-headline tracking-tighter">ShortItOut</h1>
+<div class="flex gap-4">
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</div>
+</div>
+<div class="max-w-2xl w-full mx-auto relative">
+<!-- Header Section -->
+<div class="mb-12 text-center">
+<p class="font-mono text-[10px] uppercase tracking-[0.4em] text-on-surface-variant mb-4">Active link asset</p>
+<h3 class="font-headline text-5xl md:text-6xl font-black text-on-surface tracking-tighter mb-2">short.it/x7y2</h3>
+<p class="font-mono text-xs text-on-surface-variant uppercase tracking-widest">Created Oct 24, 2023</p>
+</div>
+<!-- QR Code Display -->
+<div class="flex justify-center mb-12">
+<div class="p-8 bg-white rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.05)] border border-white/10 group cursor-crosshair">
+<!-- Placeholder for QR Code Visual -->
+<div class="w-48 h-48 bg-white flex items-center justify-center">
+<svg class="w-full h-full fill-black" viewbox="0 0 100 100">
+<rect height="10" width="10" x="10" y="10"></rect>
+<rect height="10" width="10" x="30" y="10"></rect>
+<rect height="10" width="10" x="10" y="30"></rect>
+<rect height="10" width="10" x="60" y="10"></rect>
+<rect height="10" width="10" x="80" y="10"></rect>
+<rect height="10" width="10" x="60" y="30"></rect>
+<rect height="10" width="10" x="10" y="60"></rect>
+<rect height="10" width="10" x="30" y="60"></rect>
+<rect height="10" width="10" x="10" y="80"></rect>
+<rect height="10" width="10" x="60" y="60"></rect>
+<rect height="20" width="20" x="70" y="70"></rect>
+<rect height="5" width="5" x="25" y="25"></rect>
+<rect height="5" width="5" x="45" y="45"></rect>
+<rect height="5" width="5" x="65" y="65"></rect>
+</svg>
+</div>
+</div>
+</div>
+<!-- URL Management Section -->
+<div class="space-y-6 mb-12">
+<!-- Short URL -->
+<div class="group">
+<label class="block font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-3 text-center">Short Alias</label>
+<div class="flex items-center gap-3 p-5 bg-surface-container-high border border-outline-variant/30 rounded-xl hover:border-primary/50 transition-all duration-300">
+<span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+<input class="flex-1 bg-transparent border-none text-primary font-mono text-base font-bold focus:ring-0" readonly="" type="text" value="https://short.it/x7y2"/>
+<button class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors group/btn">
+<span class="material-symbols-outlined text-primary" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Long URL -->
+<div class="group">
+<label class="block font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-3 text-center">Destination Target</label>
+<div class="flex items-center gap-3 p-4 bg-surface-container-low border border-outline-variant/20 rounded-xl hover:border-outline transition-all duration-300">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="link">link</span>
+<input class="flex-1 bg-transparent border-none text-on-surface-variant font-mono text-[13px] focus:ring-0 truncate" readonly="" type="text" value="https://vimeo.com/channels/staffpicks/8273641-short-film-narrative"/>
+<button class="p-2 hover:bg-surface-container-high rounded-lg transition-colors group/btn">
+<span class="material-symbols-outlined text-on-surface-variant group-hover/btn:text-on-surface" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Share Action -->
+<div class="mb-12">
+<button class="w-full flex items-center justify-center gap-3 py-4 bg-[#e7e4ec] text-[#0e0e10] rounded-xl font-headline font-bold text-sm uppercase tracking-widest hover:bg-white active:scale-[0.98] transition-all shadow-lg shadow-white/5">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+</svg>
+                        Share on Twitter
+                    </button>
+</div>
+<!-- Footer Actions -->
+<div class="flex items-center justify-center pt-8 border-t border-[#27272a]/20">
+<button class="px-8 py-3 border border-error/20 text-error/60 hover:text-error hover:bg-error/5 hover:border-error/40 font-mono text-[10px] uppercase tracking-[0.3em] rounded-lg transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span>
+                        Delete Link
+                    </button>
+</div>
+<!-- Subtle Decorative Element - Adjusted for centering -->
+<div class="fixed bottom-0 right-0 p-12 opacity-5 pointer-events-none select-none hidden lg:block">
+<span class="font-headline text-[16rem] font-black tracking-tighter leading-none">x7y2</span>
+</div>
+</div>
+</main>
+</div>
+</body></html>
