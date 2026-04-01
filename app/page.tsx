@@ -33,7 +33,7 @@ export default function Home() {
         aria-hidden
         className={cn(
           "pointer-events-none fixed inset-0 z-100 opacity-[0.03]",
-          "bg-[image:url(https://lh3.googleusercontent.com/aida-public/AB6AXuDLitToQ8P2ErYblwEX2DwiJ-33hAZqxhaE6bzZE3V8UpNtx_KYkAoCmoJaWAzeDOUnjCzzxPTvofWUEOHsvCPZNM9fDjoY8-UFmUhZPJqE5Bl6V4jiavII4HPRxRiNguOpy_AJIlC0AysaPrEuoP6NQmolpreA4uiUGMgxdbr2k3sE8K8xKkP1CKbZDR41NdoGLFalzbgbtjXDZPo-GKHbL9d37EoHtIUkZvU0vQPDT2lvg0lA8fhMR41TdTB0D3kMJ1sON7sIDsw)]"
+          "bg-[image:url(https://lh3.googleusercontent.com/aida-public/AB6AXuDLitToQ8P2ErYblwEX2DwiJ-33hAZqxhaE6bzZE3V8UpNtx_KYkAoCmoJaWAzeDOUnjCzzxPTvofWUEOHsvCPZNM9fDjoY8-UFmUhZPJqE5Bl6V4jiavII4HPRxRiNguOpy_AJIlC0AysaPrEuoP6NQmolpreA4uiUGMgxdbr2k3sE8K8xKkP1CKbZDR41NdoGLFalzbgbtjXDZPo-GKHbL9d37EoHtIUkZvU0vQPDT2lvg0lA8fhMR41TdTB0D3kMJ1sON7sIDsw)] bg-center bg-cover bg-no-repeat"
         )}
       />
 
