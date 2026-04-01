@@ -16,12 +16,14 @@ import { useShortUrl } from "./hooks/useShortUrl";
 import { z } from "zod";
 import Link from "next/link";
 import { useHeroStats } from "./hooks/useHeroStats";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function Home() {
   const { shortUrl, isLoading, newUrl } = useShortUrl();
   const [url, setUrl] = useState("");
   const { data: heroStats } = useHeroStats();
-
+  const { data: session } = useSession();
   const isValidUrl = useMemo(() => z.url().safeParse(url.trim()), [url]);
   const canSubmit = isValidUrl.success || url.length !== 0;
 
@@ -70,7 +72,11 @@ export default function Home() {
                 className="h-12 gap-2 px-8 text-xs font-bold tracking-widest uppercase"
                 disabled={!canSubmit || isLoading}
                 onClick={() => {
-                  shortUrl(url);
+                  if (session) {
+                    shortUrl(url);
+                  } else {
+                    toast.error("Please login to shorten your URL");
+                  }
                 }}
               >
                 Shorten
