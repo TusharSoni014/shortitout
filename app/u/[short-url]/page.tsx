@@ -12,5 +12,11 @@ export default async function ShortUrlPage({
   if (!link) {
     notFound();
   }
+
+  await prisma.link.update({
+    where: { shortUrl },
+    data: { clicks: link.clicks + 1 },
+  });
+  
   return redirect(link.longUrl);
 }

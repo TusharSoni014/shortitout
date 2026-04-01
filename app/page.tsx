@@ -11,16 +11,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SiteHeader } from "@/components/landing/site-header";
-import { SiteFooter } from "@/components/landing/site-footer";
 import { cn } from "@/lib/utils";
 import { useShortUrl } from "./hooks/useShortUrl";
 import { z } from "zod";
 import Link from "next/link";
+import { useHeroStats } from "./hooks/useHeroStats";
 
 export default function Home() {
   const { shortUrl, isLoading, newUrl } = useShortUrl();
   const [url, setUrl] = useState("");
+  const { data: heroStats } = useHeroStats();
 
   const isValidUrl = useMemo(() => z.url().safeParse(url.trim()), [url]);
   const canSubmit = isValidUrl.success || url.length !== 0;
@@ -111,7 +111,9 @@ export default function Home() {
                   Network activity
                 </div>
                 <div className="text-5xl font-bold tracking-tighter text-foreground">
-                  1,240,582<span className="text-zinc-700">+</span>
+                  <span className="text-zinc-700">
+                    {heroStats?.totalLinks || 0}
+                  </span>
                 </div>
                 <p className="mt-4 text-xs font-bold tracking-widest text-zinc-500 uppercase">
                   Links Shortened
@@ -122,7 +124,9 @@ export default function Home() {
                   Global traffic
                 </div>
                 <div className="text-5xl font-bold tracking-tighter text-foreground">
-                  8,902,341<span className="text-zinc-700">+</span>
+                  <span className="text-zinc-700">
+                    {heroStats?.totalClicks || 0}
+                  </span>
                 </div>
                 <p className="mt-4 text-xs font-bold tracking-widest text-zinc-500 uppercase">
                   Total Clicks

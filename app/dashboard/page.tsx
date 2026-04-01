@@ -4,12 +4,32 @@ import Link from "next/link";
 import { ArrowUpRight, Copy } from "@phosphor-icons/react/dist/ssr";
 import { useAllLink } from "../hooks/useAllLink";
 import type { Link as PrismaLink } from "@/lib/generated/prisma/browser";
+import { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function DashboardPage() {
-  const { data: allLinks, isLoading: allLinksLoading } = useAllLink();
+  const {
+    data: allLinks,
+    isLoading: allLinksLoading,
+    refetch: refetchAllLinks,
+  } = useAllLink();
+  const [currentLink, setCurrentLink] = useState<PrismaLink | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0e0e10] text-[#e7e4ec]">
+    <div className="relative min-h-screen overflow-hidden bg-[#0e0e10] text-[#e7e4ec] pt-[50px]">
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 opacity-[0.03]"
@@ -23,13 +43,6 @@ export default function DashboardPage() {
 
       <div className="relative z-10 flex min-h-screen">
         <aside className="hidden w-[320px] border-r border-zinc-800/50 bg-zinc-950/40 p-6 lg:block">
-          <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-zinc-400">
-            Recently Shortened
-          </p>
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-600">
-            Latest 24H Activity
-          </p>
-
           <div className="mt-8 space-y-2">
             {allLinksLoading ? (
               <div>Loading...</div>
@@ -37,6 +50,7 @@ export default function DashboardPage() {
               allLinks?.map((link: PrismaLink) => (
                 <button
                   key={link.shortUrl}
+                  onClick={() => setCurrentLink(link)}
                   className="group w-full border border-transparent bg-transparent px-4 py-4 text-left transition hover:border-zinc-800 hover:bg-zinc-900/80"
                 >
                   <div className="flex items-center justify-between gap-4">
@@ -54,77 +68,143 @@ export default function DashboardPage() {
           </div>
         </aside>
 
-        <main className="flex flex-1 items-center justify-center px-6 py-16 lg:px-16">
-          <div className="w-full max-w-2xl">
-            <div className="mb-10 text-center">
-              <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-zinc-500">
-                Active Link Asset
-              </p>
-              <h1 className="mt-4 text-5xl font-black tracking-tighter md:text-6xl">
-                short.it/x7y2
-              </h1>
-              <p className="mt-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
-                Created Oct 24, 2023
-              </p>
-            </div>
-
-            <div className="mb-10 flex justify-center">
-              <div className="border border-white/10 bg-white p-7 shadow-[0_0_40px_rgba(255,255,255,0.07)]">
-                <div className="grid h-48 w-48 grid-cols-8 gap-1 bg-white p-2">
-                  {[...Array(64)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={
-                        "aspect-square " +
-                        ([
-                          0, 1, 2, 8, 10, 16, 17, 18, 6, 7, 14, 22, 48, 49, 50,
-                          56, 58, 62, 63, 35, 36, 43, 44, 53,
-                        ].includes(i)
-                          ? "bg-black"
-                          : "bg-white")
-                      }
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-5">
-              <div>
-                <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
-                  Short Alias
+        {currentLink ? (
+          <main className="flex flex-1 items-center justify-center px-6 py-16 lg:px-16">
+            <div className="w-full max-w-2xl">
+              <div className="mb-10 text-center">
+                <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-zinc-500">
+                  Active Link Asset
                 </p>
-                <div className="flex items-center gap-3 border border-zinc-700/60 bg-zinc-800/50 px-4 py-4">
-                  <span className="font-mono text-sm font-semibold text-zinc-100">
-                    https://short.it/x7y2
-                  </span>
-                  <Copy className="ml-auto text-zinc-400" />
-                </div>
-              </div>
-
-              <div>
-                <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
-                  Destination Target
+                <h1 className="mt-4 text-xl font-black tracking-tighter md:text-4xl">
+                  {currentLink?.shortUrl}
+                </h1>
+                <h2 className="text-2xl font-bold text-zinc-200 my-3 bg-zinc-800/50 p-4">
+                  {currentLink?.clicks || 0} clicks
+                </h2>
+                <p className="mt-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+                  Created{" "}
+                  {new Date(currentLink?.createdAt ?? "").toLocaleDateString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }
+                  )}
                 </p>
-                <div className="flex items-center gap-3 border border-zinc-800 bg-zinc-900/70 px-4 py-4">
-                  <span className="truncate font-mono text-xs text-zinc-400">
-                    https://vimeo.com/channels/staffpicks/8273641-short-film
-                  </span>
-                  <Copy className="ml-auto text-zinc-500" />
+              </div>
+
+              <div className="mb-10 flex justify-center">
+                <div className="border border-white/10 bg-white p-7 shadow-[0_0_40px_rgba(255,255,255,0.07)]">
+                  <QRCodeSVG value={currentLink?.shortUrl ?? ""} />
                 </div>
               </div>
-            </div>
 
-            <div className="mt-8 flex justify-center">
-              <Link
-                href="/"
-                className="bg-zinc-100 px-8 py-3 font-semibold tracking-wide text-zinc-950 transition hover:bg-white"
-              >
-                Create New Short Link
-              </Link>
+              <div className="space-y-5">
+                <div>
+                  <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+                    Short Alias
+                  </p>
+                  <div className="flex justify-between items-center gap-3 border border-zinc-700/60 bg-zinc-800/50 px-4 py-4">
+                    <span className="font-mono text-sm font-semibold text-zinc-100">
+                      {window.location.origin}/u/{currentLink?.shortUrl}
+                    </span>
+                    <button
+                      onClick={() => {
+                        window.navigator.clipboard.writeText(
+                          `${window.location.origin}/u/${currentLink?.shortUrl}`
+                        );
+                        toast.success("Copied to clipboard");
+                      }}
+                    >
+                      <Copy className="ml-auto text-zinc-400" />
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+                    Destination Target
+                  </p>
+                  <div className="flex items-center gap-3 border border-zinc-800 bg-zinc-900/70 px-4 py-4">
+                    <span className="truncate font-mono text-xs text-zinc-400">
+                      {currentLink?.longUrl}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href="/"
+                  className="bg-zinc-100 px-8 flex justify-center items-center font-semibold tracking-wide text-zinc-950 transition hover:bg-white h-[55px]"
+                >
+                  Create New Short Link
+                </Link>
+
+                <Dialog
+                  open={deleteDialogOpen}
+                  onOpenChange={setDeleteDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      className="ml-4 px-8 flex justify-center items-center font-semibold h-[55px]"
+                    >
+                      Delete Link
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you absolutely sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your link and remove it from our database.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button variant="outline">Cancel</Button>
+                      <Button
+                        loading={isDeleting}
+                        variant="destructive"
+                        disabled={isDeleting}
+                        onClick={async () => {
+                          setIsDeleting(true);
+                          try {
+                            const response = await fetch(`/api/short`, {
+                              method: "DELETE",
+                              body: JSON.stringify({
+                                short_url: currentLink?.shortUrl,
+                              }),
+                            });
+                            if (response.ok) {
+                              toast.success("Link deleted successfully");
+                              setDeleteDialogOpen(false);
+                              setCurrentLink(null);
+                              refetchAllLinks();
+                            } else {
+                              toast.error("Failed to delete link");
+                            }
+                          } catch {
+                            toast.error("Failed to delete link");
+                          } finally {
+                            setIsDeleting(false);
+                          }
+                        }}
+                      >
+                        Confirm Delete
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
+          </main>
+        ) : (
+          <div className="w-full h-dvh flex justify-center items-center text-zinc-500 text-xl">
+            No link selected
           </div>
-        </main>
+        )}
       </div>
     </div>
   );
