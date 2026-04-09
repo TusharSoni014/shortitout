@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Copy } from "@phosphor-icons/react/dist/ssr";
+import { signIn, useSession } from "next-auth/react";
 import { useAllLink } from "../hooks/useAllLink";
 import type { Link as PrismaLink } from "@/lib/generated/prisma/browser";
 import { useState } from "react";
@@ -18,7 +19,27 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+const bgNoiseStyle = {
+  backgroundImage:
+    "url(https://lh3.googleusercontent.com/aida-public/AB6AXuD24LSYMz6LeYYMOxSmzBLE6DLsZw0H9l52s-RTlrNw-N5CJzCKnPEK-UyoaAQWyKtU7bsflsCDygIFiC_cdBNg1yLtPnMBDgy_VGKfVeN6xFzoEXGATXo9K8xwjwV674hOyyRqATnfVktcPoiA1PMjAec_B5iBGx2Rkz1V8WW6fwFtxNkQH7-BSyNHjUUyMgEHcM3ysqgA7J8CavRYy46SqvaC578sB6rh5W5dcKcanHNaNamd1X4rPzwTRm1RhmBDojIulLuvUa0)",
+} as const;
+
+function DashboardShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-[#0e0e10] text-[#e7e4ec] pt-[50px]">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 opacity-[0.03]"
+        style={bgNoiseStyle}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(1200px_800px_at_top_left,#18181b_0%,#0e0e10_70%)]" />
+      {children}
+    </div>
+  );
+}
+
 export default function DashboardPage() {
+  const { data: session, status } = useSession();
   const {
     data: allLinks,
     isLoading: allLinksLoading,
@@ -28,19 +49,53 @@ export default function DashboardPage() {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
+  if (status === "loading") {
+    return (
+      <DashboardShell>
+        <div className="relative z-10 flex min-h-screen items-center justify-center">
+          <p className="font-mono text-sm text-zinc-500">Loading…</p>
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  if (!session) {
+    return (
+      <DashboardShell>
+        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-8 px-6">
+          <div className="mx-auto max-w-md text-center">
+            <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-zinc-500">
+              Dashboard
+            </p>
+            <h1 className="mt-4 text-2xl font-bold tracking-tight text-zinc-100 md:text-3xl">
+              Login to manage your links
+            </h1>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-500">
+              Your short links and click stats show up here after you sign in
+              with Google.
+            </p>
+            <Button
+              className="mt-8 px-6 text-[10px] font-bold uppercase tracking-widest"
+              onClick={() => signIn("google")}
+            >
+              Login with Google
+            </Button>
+            <p className="mt-6">
+              <Link
+                href="/"
+                className="text-sm text-zinc-400 underline-offset-4 transition hover:text-zinc-200 hover:underline"
+              >
+                Back to home
+              </Link>
+            </p>
+          </div>
+        </div>
+      </DashboardShell>
+    );
+  }
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0e0e10] text-[#e7e4ec] pt-[50px]">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "url(https://lh3.googleusercontent.com/aida-public/AB6AXuD24LSYMz6LeYYMOxSmzBLE6DLsZw0H9l52s-RTlrNw-N5CJzCKnPEK-UyoaAQWyKtU7bsflsCDygIFiC_cdBNg1yLtPnMBDgy_VGKfVeN6xFzoEXGATXo9K8xwjwV674hOyyRqATnfVktcPoiA1PMjAec_B5iBGx2Rkz1V8WW6fwFtxNkQH7-BSyNHjUUyMgEHcM3ysqgA7J8CavRYy46SqvaC578sB6rh5W5dcKcanHNaNamd1X4rPzwTRm1RhmBDojIulLuvUa0)",
-        }}
-      />
-
-      <div className="absolute inset-0 bg-[radial-gradient(1200px_800px_at_top_left,#18181b_0%,#0e0e10_70%)]" />
-
+    <DashboardShell>
       <div className="relative z-10 flex min-h-screen">
         <aside className="hidden w-[320px] border-r border-zinc-800/50 bg-zinc-950/40 p-6 lg:block">
           <div className="mt-8 space-y-2">
@@ -208,6 +263,6 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-    </div>
+    </DashboardShell>
   );
 }

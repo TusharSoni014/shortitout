@@ -5,9 +5,11 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function SiteHeader({ className }: { className?: string }) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <header
@@ -40,7 +42,10 @@ export function SiteHeader({ className }: { className?: string }) {
             <Button
               size="sm"
               className="px-4 py-1.5 text-[10px] font-bold tracking-widest uppercase"
-              onClick={() => signOut()}
+              onClick={async () => {
+                await signOut();
+                router.push("/");
+              }}
             >
               Logout
             </Button>
