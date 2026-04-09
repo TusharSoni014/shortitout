@@ -96,7 +96,9 @@ export default function DashboardPage() {
 
               <div className="mb-10 flex justify-center">
                 <div className="border border-white/10 bg-white p-7 shadow-[0_0_40px_rgba(255,255,255,0.07)]">
-                  <QRCodeSVG value={currentLink?.shortUrl ?? ""} />
+                  <QRCodeSVG
+                    value={`${window.location.origin}/u/${currentLink?.shortUrl}`}
+                  />
                 </div>
               </div>
 
